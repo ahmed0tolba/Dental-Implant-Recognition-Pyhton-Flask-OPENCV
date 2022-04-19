@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+
+<html>
+<head>
+<title>DENTEX</title>
+<!-- style css -->
+<link rel="stylesheet" href="{{url_for('static',filename='style.css')}}"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha256-/ykJw/wDxMa0AQhHDYfuMEwVb4JHMx9h4jD4XvHqVzU=" crossorigin="anonymous" />
+
+
+
+</head>
+
+
+<!-----------------------------------------------------body---------------------------------------------->
+
+<body >
+<div class="porfilehead">
+ <div >
+        <ul class="mainmenu">
+            <li> <a href="index.html">Home</a> </li>
+            <li> <a href="#about">Login</a> </li>
+            <li> <a href="#testimonial">About</a> </li>
+            <li> <a href="#contact">Contact Us</a> </li>
+        </ul>
+        <hr>
+ </div>
+
+
+
+    <div class ="contant">
+        <p>  welcome to our  </p> 
+        <h1>DENTEX</h1>
+        <p> implant identifier system </p>
+        <br><br>
+        <a class="btn btn-outline-secondary" href="{{ url_for('login') }}">Login</a>
+    </div>
+
+<div class="img">
+
+<img src="{{url_for('static',filename='images/logo1.png')}}" alt="#">
+
+</div>
+</div><!----wite space end -->
+<!----------------------------------------------page B----------------------------------------------->
+<div class="pageB">
+<div id="circle">
+    <br>
+    <Center><h1>About Us</h1></Center>
+    </div>
+<div class="contantB">
+    <h1>DENTEX</h1>
+    <p> DENTX is a website that tend to help dentest how find problem with identfay implant manufacturer company </p>
+    <p>A web based application that allows dental practitioners to upload radiographs for identification. Deep learning mechanisms are leveraged to classify the implant system and provide additional helpful information about the implant.</p>
+</div>
+<div class="imgB">
+    <img src="{{url_for('static',filename='images/img2.png')}}" alt="#"> 
+</div>
+</div>
+</body>

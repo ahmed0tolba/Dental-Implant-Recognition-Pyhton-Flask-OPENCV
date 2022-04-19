@@ -1,0 +1,98 @@
+.wrapper {
+    position: relative;
+   }
+   .div1 {
+       float: left;
+       width: 30%;
+       height: 300px; /* only for demonstration, should be removed */
+       background: #f454;
+       padding: 20px;
+   }
+   .div2 {
+   
+       float: left;
+       padding: 20px;
+       width: 70%;
+       background-color: #f6f1f1;
+       height: 300px; /* only for demonstration, should be removed */
+   }
+   body{
+       overflow-x: hidden;
+       background-color:  rgb(218, 216, 216);
+       height: 100%;
+       top:0;
+       bottom:0;
+       left:0;
+       right:0;
+   }
+   .porfilehead
+   {  
+       border-radius: 20px;
+       overflow:auto;
+       position: relative;
+       width: 100%;
+       height: 700px;
+       margin: 4px auto 4px ;
+       background: #ffffff;
+       box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.3);
+   
+   }
+   /*---------------------------------------------*/
+   .mainmenu{
+       position: sticky;
+       font-family: "Trirong", serif ,Tahoma;
+       list-style-type: none;
+       justify-content:center;
+       display: flex;
+     
+       }
+       .mainmenu a {
+         float: left;
+         display: block;
+         color: #2b678a;
+         text-align: center;
+         padding: 14px 16px;
+         text-decoration: none;
+       }
+       
+       /* Change color on hover */
+       .mainmenu a:hover {
+         color: black;
+         text-decoration: underline;
+       }
+       .contant {
+           position: absolute;
+           top: 30%;
+           left: 5%;
+           text-align:left;
+           font-family: "Trirong", serif ,Tahoma;
+           line-height: 2px;
+       }
+       .contant h1{
+   font-size: 60px;
+   color: #2b678a;
+       }
+   
+       
+       .hero{
+   position:relative;
+   width: 100%;
+   height: 100vh;
+   
+       }
+       .img{
+   position: absolute;
+   top: 30%;
+   left: 50%;
+       }
+   .pageB{
+       border-radius: 20px;
+       overflow:auto;
+       position: relative;
+       width: 100%;
+       height: 100%;
+       margin: 4% auto 4% ;
+       background: #aaa9a9;
+       box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.3);
+   
+   }

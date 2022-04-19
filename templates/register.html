@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head><title>Register</title></head>
+    <body>
+        <form action="" method="POST">
+            {{form.hidden_tag()}}
+            {{form.username}}
+            {{form.email}}
+            {{form.password}}
+            {{form.submit}}
+        
+            <!-- Asset Tag:<br>
+            Name: <input type="text" name="name"><br>
+            Email: <input type="text" name="email"><br>
+            Password: <input type="password" name="password"><br>
+            RePassword: <input type="password" name="repassword"><br>
+            <input type="submit" value="Submit"> -->
+            
+        </form>
+
+        <a href="{{url_for('login')}}">Already have an account, Login Page</a>
+
+    </body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head><title>Login</title></head>
+    <body>
+
+
+        <form action="" method="POST">
+            {{form.hidden_tag()}}
+            {{form.email}}
+            {{form.password}}
+            {{form.submit}}
+            
+            <!-- Asset Tag:<br>
+            Email: <input type="email" name="email"><br>
+            Password: <input type="password" name="password"><br>
+            <input type="submit" value="Submit"> -->
+        </form>
+        <a href="{{url_for('register')}}">Don't have an account register</a>
+    </body>
+</html>
+<!----------------------------------------shahad page -------------------------------->
