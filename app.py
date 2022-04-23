@@ -1,6 +1,5 @@
 # pip install flask 
 # pip install Flask-SQLAlchemy flask_login flask_bcrypt flask_wtf wtforms email_validator 
-# 
 # from distutils.command.upload import upload
 import sqlite3
 from flask import Flask,make_response,url_for,redirect, request, render_template,current_app, g, send_file,flash
