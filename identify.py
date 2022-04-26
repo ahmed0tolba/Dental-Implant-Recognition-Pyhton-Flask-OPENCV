@@ -83,7 +83,7 @@ def getImplantValues(SaveDir,imgName,thresholdbw):
         if (wp>wm):
           angle -=1
           direction = -1
-        if (c>max or wp==wm or (direction != directionold and direction ==- directionold)):
+        if (c>max or wp==wm or (direction != 0 and direction ==- directionold)): # exit 
           Saturated = True
           
       # print("angle ",angle)

@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
-    <head><title>home</title></head>
+    <head><title>home</title>
+        {% for item in data %}
+    <link rel="preload" href="../static/implants/{{item[4]}}" > 
+    <link rel="preload" href="../static/implants/BW_{{item[4]}}" > 
+    {% endfor %}
+    </head>
     <body>
        
         <!DOCTYPE html>
@@ -30,108 +35,55 @@
                     <li> <a href="#contact">Contact Us</a> </li>
                 </ul>
                <!-- <hr>----->
-         </div>
+            </div>
             <!-------input part------->
-<div>
-    <form action="" method="POST" enctype="multipart/form-data">
-        {{form3.hidden_tag()}}
-        <input type="file" name="file">
-        <label>
-            {{form3.patientemail}}
-        </label>
-        <label>
-            {{form3.patientname}}
-        </label>
-        <label>
-            {{form3.comment}}
-        </label>
-        <label>
-            {{form3.bw_lvl(size=3, value="0")}}
-        </label>
-        <input type="submit">
-    </form>
- 
-</div>
-
-<div style="text-align: center;display: block;">
-    <table style="border: 2px solid #15245e; margin-top:1em ;margin-left:auto;margin-right:auto;border-collapse: collapse;">
-        {% for item in data %}
-        <tr style="border-bottom: .2em solid black;">
-            <!-- <td style="border-right: .1em solid black; padding: 1em;">{{item[0]}}</td> -->
-            <!-- <td style="border-right: .1em solid black; padding: 1em;">{{item[1]}}</td> -->
-            <td style="border-right: .1em solid black; padding: 1em;">{{item[2]}}</td>
-            <td style="border-right: .1em solid black; padding: 1em;">{{item[3]}}</td>
-            <td style="border-right: .1em solid black; padding: 1em;">
-                <img src='../static/implants/{{item[4]}}'>                
-            </td>
-            <td style="border-right: .1em solid black; padding: 1em;">
-                <img src='../static/implants/BW_{{item[4]}}'>                
-            </td>
-            <td style="border-right: .1em solid black; padding: 1em;">{{item[5]}}</td>
-            <td style="border-right: .1em solid black; padding: 1em;">{{item[6]}}</td>
-            <td style="border-right: .1em solid black; padding: 1em;">{{item[7]}}</td>
-            <td style="border-right: .1em solid black; padding: 1em;">{{item[8]}}</td>
+            <div>
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {{form3.hidden_tag()}}
+                    <input type="file" name="file">
+                    <label>
+                        {{form3.patientemail}}
+                    </label>
+                    <label>
+                        {{form3.patientname}}
+                    </label>
+                    <label>
+                        {{form3.comment}}
+                    </label>
+                    <label>
+                        {{form3.bw_lvl(size=3, value="0")}}
+                    </label>
+                    <input type="submit">
+                </form>
             
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-
-            <!-- <div class="divimg2">
-                
-            </div>
-            <div class="divimg3"></div>
-
-        </div> -->
-        <!---end top-->
-        <hr>
-
-        <!------------------------------------------------x-ray page ------------------------------------------------------->
-        <!-- <div id="A" class="blue">
-
-            <div class="picborder1"></div>
-            <div id="display_image" class="picborder2"></div>
-
-            <form action=" " class="file">
-                <input type="file" id="image_input" name="filename">
-            </form>
-            <div class="detection"></div>
-            <div class="half2">
-                <h1>Manufacturer Details</h1>
-                <div class="container">
-                    <div id="activeBorder" class="active-border">
-                        <div id="circle" class="circle">
-                            <span class="prec 270" id="prec">0%</span>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
-        </div> -->
-        <!----xray end ---------->
-
-
-
-
-
-
-
-
-        <!------------------------------------------------files page ------------------------------------------------------->
-        <!-- <div id="B" class="blue">
-
-
-        </div> -->
+            <div style="text-align: center;display: block;">
+                <table style="border: 2px solid #15245e; margin-top:1em ;margin-left:auto;margin-right:auto;border-collapse: collapse;">
+                    {% for item in data %}
+                    <tr style="border-bottom: .2em solid black;">
+                        <!-- <td style="border-right: .1em solid black; padding: 1em;">{{item[0]}}</td> -->
+                        <!-- <td style="border-right: .1em solid black; padding: 1em;">{{item[1]}}</td> -->
+                        <td style="border-right: .1em solid black; padding: 1em;">{{item[2]}}</td>
+                        <td style="border-right: .1em solid black; padding: 1em;">{{item[3]}}</td>
+                        <td style="border-right: .1em solid black; padding: 1em;">
+                            <img class ="im" id="{{item[4]}}" src='../static/implants/{{item[4]}}'>                
+                        </td>
+                        <td style="border-right: .1em solid black; padding: 1em;">
+                            <img class ="im" id="BW_{{item[4]}}" src='../static/implants/BW_{{item[4]}}'>                
+                        </td>
+                        <!-- <td style="border-right: .1em solid black; padding: 1em;">{{item[5]}}</td> -->
+                        <td style="border-right: .1em solid black; padding: 1em;">{{item[6]}}</td>
+                        <td style="border-right: .1em solid black; padding: 1em;">{{item[7]}}</td>
+                        <td style="border-right: .1em solid black; padding: 1em;">{{item[8]}}</td>
+                        
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
 
     </div>
     <!--- save part end --->
-
-
-
-
-
-
 
     </div>
     <!------ withe space end  -------->
@@ -142,73 +94,31 @@
 
 
 <script>
-    /***************switch content  ************/
-    var A = document.getElementById("A");
-    var B = document.getElementById("B");
-    B.style.display = "none";
-    var divimg2 = document.getElementsByClassName("divimg2");/*implant img */
-    var divimg3 = document.getElementsByClassName("divimg3");/*file img */
-    divimg3[0].onclick = function () {
-        if (A.style.display !== "none") {
-            A.style.display = "none";
-            B.style.display = "block";
-        } else {
-            A.style.display = "block";
-            B.style.display = "none";
-        }
-    };
-    /***************img display ************/
-    const image_input = document.querySelector("#image_input");
-    var uploaded_image;
 
-    image_input.addEventListener('change', function () {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => {
-            uploaded_image = reader.result;
-            document.querySelector("#display_image").style.backgroundImage = `url(${uploaded_image})`;
-        });
-        reader.readAsDataURL(this.files[0]);
-    });
-
-    /*********************/
-    var i = 0, prec;
-    var degs = $("#prec").attr("class").split(' ')[1];
-    var activeBorder = $("#activeBorder");
-
-    setTimeout(function () {
-        if ($("#circle").is(":hover"))
-            loopit("c");
-        else
-            loopit("nc");
-    }, 1);
-
-    function loopit(dir) {
-        if (dir == "c")
-            i++
-        else
-            i--;
-        if (i < 0)
-            i = 0;
-        if (i > degs)
-            i = degs;
-        prec = (100 * i) / 360;
-        $(".prec").html(Math.round(prec) + "%");
-
-        if (i <= 180) {
-            activeBorder.css('background-image', 'linear-gradient(' + (90 + i) + 'deg, transparent 50%, #A2ECFB 50%),linear-gradient(90deg, #A2ECFB 50%, transparent 50%)');
-        }
-        else {
-            activeBorder.css('background-image', 'linear-gradient(' + (i - 90) + 'deg, transparent 50%, #39B4CC 50%),linear-gradient(90deg, #A2ECFB 50%, transparent 50%)');
-        }
-
-        setTimeout(function () {
-            if ($("#circle").is(":hover"))
-                loopit("c");
-            else
-                loopit("nc");
-        }, 1);
-
+function preloadImages(array) {
+    if (!preloadImages.list) {
+        preloadImages.list = [];
     }
+    var list = preloadImages.list;
+    for (var i = 0; i < array.length; i++) {
+        var img = new Image();
+        img.onload = function() {
+            var index = list.indexOf(this);
+            if (index !== -1) {
+                // remove image from the array once it's loaded
+                // for memory consumption reasons
+                list.splice(index, 1);
+            }
+        }
+        list.push(img);
+        img.src = array[i];
+    }
+}
+
+preloadImages(["url1.jpg", "url2.jpg", "url3.jpg"
+
+]);
+
 </script>
 
  
