@@ -5,7 +5,9 @@
 import sqlite3
 from flask import Flask,make_response,url_for,redirect, request, render_template,current_app, g, send_file,flash
 from flask_sqlalchemy import SQLAlchemy
+#login 
 from flask_login import UserMixin, LoginManager,login_user,login_required,logout_user,current_user
+#form 
 from flask_wtf import FlaskForm # mistake (wtforms)
 from wtforms import StringField,PasswordField, SubmitField
 from wtforms.validators import InputRequired,Length,ValidationError
@@ -15,7 +17,7 @@ import os
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from identify import getImplantType
-
+import numpy as np
 app = Flask(__name__)
 app.config['SECRET_KEY']='rahaf'
 db = SQLAlchemy(app)
@@ -24,11 +26,12 @@ databasename = '_database.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + databasename
 userstablename = "user" 
 images_table_name = "upload" 
+############## login manager #########
 login_manager = LoginManager()    # pip install flask-login 
 login_manager.init_app(app) 
 login_manager.login_view ="login"
 
-##############################
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -70,7 +73,7 @@ class RegisterForm(FlaskForm):
     if existing_email_email:
       raise ValidationError("That email name already exists")
 
-########## FLASK FORM  ###########
+
 class LoginForm(FlaskForm):
   email = StringField(validators = [InputRequired(),Length(min=4,max=40)],render_kw={"placeholder":"Email"})
   password = PasswordField(validators = [InputRequired(),Length(min=4,max=20)],render_kw={"placeholder":"Password"})
@@ -108,27 +111,35 @@ def index():
 
 @app.route('/login',methods=['GET','POST'])
 def login():
+  
   if current_user.is_authenticated:
     return redirect(url_for('dashboard'))
 
+  
   form1 = LoginForm()
   if form1.validate_on_submit():
       # Login and validate the user.
       # user should be an instance of your `User` class
       # login_user(user)
-    user = User.query.filter_by(email=form1.email.data).first()
-      # flask.flash('Logged in successfully.')
-    print("hi1")##
-    if user:
-      print("hi")##
-      if bcrypt.check_password_hash(user.password, form1.password.data):
-        login_user(user)
-        return redirect(url_for('dashboard'))
-      # next = flask.request.args.get('next')
-      # # is_safe_url should check if the url is safe for redirects.
-      # # See http://flask.pocoo.org/snippets/62/ for an example.
-      # if not is_safe_url(next):
-      #     return flask.abort(400)
+    if request.method == "POST":
+      user = User.query.filter_by(email=form1.email.data).first()
+        # flask.flash('Logged in successfully.')
+      print("hi1")##
+      if user:
+        print("hi")##
+        if bcrypt.check_password_hash(user.password, form1.password.data):
+          login_user(user)
+          return redirect(url_for('dashboard'))
+        
+      else:
+          flash(" !!!!!! Invalid username or password !!!!!")
+        #else:
+        #   flash("Incorrect password")
+        # next = flask.request.args.get('next')
+        # # is_safe_url should check if the url is safe for redirects.
+        # # See http://flask.pocoo.org/snippets/62/ for an example.
+        # if not is_safe_url(next):
+        #     return flask.abort(400)
 
   form2 = RegisterForm()
   if form2.validate_on_submit():
@@ -142,15 +153,17 @@ def login():
 @app.route('/dashboard',methods=['GET','POST'])
 @login_required
 def dashboard():
+  resultlast=""
   # print(current_user.username)
   form3 = UploadForm()
-  if form3.validate_on_submit():
+  if form3.validate_on_submit():   #اعرفي استخدامها 
     
     if request.method == 'POST':
       # check if the post request has the file part
       if 'file' not in request.files:
         flash('No file part')
         return redirect(request.url)
+      # get the implant image  
       file = request.files['file']
       # if user does not select file, browser also
       # submit a empty part without filename
@@ -162,20 +175,25 @@ def dashboard():
         imagename = current_user.username + "_" + datetime.now().strftime("%m_%d_%Y_%H_%M_%S") + "_" +filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], imagename))
         manufacturer = getImplantType(app.config['UPLOAD_FOLDER'], imagename,int(form3.bw_lvl.data))
+        manufactures =['strau','astra','b_b']
+        indexmax = np.argmax(manufacturer)
+        resultlast = manufactures[indexmax] + " " + str(round(manufacturer[0][indexmax] * 100)) + "%"
         new_upload = Upload(imagename=imagename,doctoremail=current_user.email, patientname=form3.patientname.data,patientemail=form3.patientemail.data,comment=form3.comment.data,bw_lvl=int(form3.bw_lvl.data),manufacturer=str(manufacturer[0]))
         db.session.add(new_upload)
         db.session.commit() 
   # images = Upload.query.filter_by(email=current_user.email).first()
   sqlite_insert_query = """select * from upload
-                            where doctoremail = ?;"""
+                            where doctoremail = ? ORDER BY id DESC;"""
   data_tuple = (current_user.email,)
   conn = sqlite3.connect(databasename, uri=True)
   cur = conn.cursor()
   cur.execute(sqlite_insert_query,data_tuple)
   data = cur.fetchall()
   conn.close()
-  return render_template('dashboard.html',form3=form3,data=data)
+  return render_template('dashboard.html',form3=form3,data=data,resultlast=resultlast)
 
+
+########function #########
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS

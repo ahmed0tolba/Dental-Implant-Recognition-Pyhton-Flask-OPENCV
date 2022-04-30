@@ -42,6 +42,7 @@
    
    }
    /*menu*/
+
    .mainmenu{
        position: sticky;
        font-family: "Trirong", serif ,Tahoma;
@@ -67,18 +68,18 @@
        /* text on the index page*/
       .contant {
            position: absolute;
-           top: 30%;
-           left: 3%;
+           top: 40%;
+           left: 5%;
            text-align:left;
            font-family: "Trirong", serif ,Tahoma;
            line-height: 2px;
        }
     .contant h1{
-   font-size: 60px;
+   font-size: 80px;
    color: #2b678a;
        }
        .contant p{
-        font-size: 20px;
+        font-size: 40px;
         color: #12415c;
             }
        
@@ -92,7 +93,7 @@
        .img{
    position: absolute;
    top: 20%;
-   left: 50%;
+   left: 35%;
   
        }
 /* button of login*/
@@ -109,14 +110,14 @@
     box-shadow: 5px 10px 8px #b1bebe;
 
 }
-/* page 2 on index page */
+/* page 2 "about page" on index page */
 .pageB{
     border-radius: 20px;
-    overflow:auto;
+    overflow-x: hidden;
     position: relative;
-    width: 100%;
+    width: 95%;
     height: 700px;
-    margin: 0.5% auto 4% ;
+    margin: 0.5% auto 0.5% ;
     background: #ebedf3;
     box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.3);
 
@@ -146,4 +147,31 @@
     height: 220px;  
     left: 50%;
     top: 30%; 
+}
+/* page 3 "contact page" on index page */
+.pageC{
+    border-radius: 20px;
+    overflow:auto;
+    position: relative;
+    width: 95%;
+    height: 700px;
+    margin: 2% auto 4% ;
+    background: #ebedf3;
+    box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.3);
+
+}
+.card {
+    padding: 10px;
+    height: 250px;
+    border: none;
+    -webkit-box-shadow: 0px 1px 9px 3px rgba(219, 210, 219, 1);
+    -moz-box-shadow: 0px 1px 9px 3px rgba(219, 210, 219, 1);
+    box-shadow: 0px 1px 9px 3px rgba(219, 210, 219, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+.space{
+    height: 150px;
+
 }

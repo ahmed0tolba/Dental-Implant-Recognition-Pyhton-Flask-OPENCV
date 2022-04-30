@@ -24,6 +24,9 @@ def getImplantValues(SaveDir,imgName,thresholdbw):
   # print("blured")
   # cv2_imshow(blured)
 
+  if thresholdbw==0:
+    thresholdbw = img.mean(axis=0).mean(axis=0)
+
   (thresh, BWFilling) = cv.threshold(blured, thresholdbw, 255, cv.THRESH_BINARY)
   cv.imwrite(SaveDir+"BW_"+imgName, BWFilling)
   # print("BWFilling")
@@ -80,7 +83,7 @@ def getImplantValues(SaveDir,imgName,thresholdbw):
         if (wp>wm):
           angle -=1
           direction = -1
-        if (c>max or wp==wm or (direction != directionold and direction ==- directionold)):
+        if (c>max or wp==wm or (direction != 0 and direction ==- directionold)): # exit 
           Saturated = True
           
       # print("angle ",angle)

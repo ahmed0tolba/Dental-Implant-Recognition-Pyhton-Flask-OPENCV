@@ -19,9 +19,9 @@
 <div class="porfilehead">
  <div >
         <ul class="mainmenu">
-            <li> <a href="index.html">Home</a> </li>
-            <li> <a href="#about">Login</a> </li>
-            <li> <a href="#testimonial">About</a> </li>
+            <li> <a href="{{ url_for('index') }}">Home</a> </li>
+            <li> <a href="{{ url_for('login') }}">Login</a> </li>
+            <li> <a href="#about">About</a> </li>
             <li> <a href="#contact">Contact Us</a> </li>
         </ul>
         <hr>
@@ -30,11 +30,11 @@
 
 
     <div class ="contant">
-        <p>  welcome to our  </p> 
-        <h1>DENTEX</h1>
+        <p>  welcome to   </p> 
+        <h1>DENTX</h1>
         <p> implant identifier system </p>
         <br><br>
-        <a class="btn btn-outline-secondary" href="{{ url_for('login') }}">Login</a>
+      <!--  <a class="btn btn-outline-secondary" href="{{ url_for('login') }}">Login</a> -->
     </div>
 
 <div class="img">
@@ -43,19 +43,49 @@
 
 </div>
 </div><!----wite space end -->
-<!----------------------------------------------page B----------------------------------------------->
-<div class="pageB">
+<!----------------------------------------------page B about page----------------------------------------------->
+<div id="about" class="pageB">
 <div id="circle">
     <br>
     <Center><h1>About Us</h1></Center>
     </div>
 <div class="contantB">
-    <h1>DENTEX</h1>
+    <h1>DENTX</h1>
     <p> DENTX is a website that tend to help dentest how find problem with identfay implant manufacturer company </p>
     <p>A web based application that allows dental practitioners to upload radiographs for identification. Deep learning mechanisms are leveraged to classify the implant system and provide additional helpful information about the implant.</p>
 </div>
 <div class="imgB">
     <img src="{{url_for('static',filename='images/img2.png')}}" alt="#"> 
 </div>
+</div>
+<!----------------------------------------------page c contact page----------------------------------------------->
+<div id="contact" class="pageC">
+    <div id="circle">
+        <br>
+        <Center><h1>Contact Us</h1></Center>
+        </div>
+        <div class ="space"></div>
+    <div class="container mt-5">
+        <div class="row g-2">
+            <div class="col-md-4">
+                <div class="card"> <img src="https://i.imgur.com/xuGJbnU.png" width="40">
+                    <h5>Address</h5>
+                    <p>KSA, Riyadh, King saud university</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card"> <img src="https://i.imgur.com/TNKflal.png" width="40">
+                    <h5>Email</h5>
+                    <p>dentx.implant@gmail.com</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card"> <img src="https://i.imgur.com/pZLFSO3.png" width="40">
+                    <h5>Phone</h5>
+                    <p>0530926037</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
