@@ -50,7 +50,7 @@ class Upload(db.Model,UserMixin):
   patientname = db.Column(db.String(20),nullable = False)
   patientemail = db.Column(db.String(40),nullable = False)
   comment = db.Column(db.String(40))
-  states = db.Column(db.Integer())
+  topman = db.Column(db.String(40))
   manufacturer = db.Column(db.String(40))
   bw_lvl = db.Column(db.Integer())
 
@@ -93,7 +93,7 @@ try:
   conn = sqlite3.connect(databasename, uri=True)
   print(f'Database exists. Succesfully connected to {databasename}')
   conn.execute('CREATE TABLE IF NOT EXISTS ' + userstablename + ' (id INTEGER PRIMARY KEY AUTOINCREMENT,username TEXT UNIQUE NOT NULL,email TEXT UNIQUE NOT NULL,password TEXT NOT NULL, states INTEGER)')
-  conn.execute('CREATE TABLE IF NOT EXISTS ' + images_table_name + ' (id INTEGER PRIMARY KEY AUTOINCREMENT,doctoremail TEXT NOT NULL,patientemail TEXT,patientname TEXT,imagename TEXT NOT NULL, states INTEGER,bw_lvl INTEGER,manufacturer TEXT,comment TEXT)')
+  conn.execute('CREATE TABLE IF NOT EXISTS ' + images_table_name + ' (id INTEGER PRIMARY KEY AUTOINCREMENT,doctoremail TEXT NOT NULL,patientemail TEXT,patientname TEXT,imagename TEXT NOT NULL,topman TEXT NOT NULL,bw_lvl INTEGER,manufacturer TEXT,comment TEXT)')
   
   print(f'Succesfully Created Table {userstablename}')
   
@@ -109,6 +109,7 @@ except sqlite3.OperationalError as err:
 def index():
     return render_template('index.html')
 
+
 @app.route('/login',methods=['GET','POST'])
 def login():
   
@@ -119,41 +120,41 @@ def login():
   form1 = LoginForm()
   if form1.validate_on_submit():
       # Login and validate the user.
-      # user should be an instance of your `User` class
-      # login_user(user)
+      # user should be an instance of `User` class
     if request.method == "POST":
       user = User.query.filter_by(email=form1.email.data).first()
-        # flask.flash('Logged in successfully.')
-      print("hi1")##
+        
+     
       if user:
-        print("hi")##
+       
         if bcrypt.check_password_hash(user.password, form1.password.data):
           login_user(user)
           return redirect(url_for('dashboard'))
         
       else:
           flash(" !!!!!! Invalid username or password !!!!!")
-        #else:
-        #   flash("Incorrect password")
-        # next = flask.request.args.get('next')
-        # # is_safe_url should check if the url is safe for redirects.
-        # # See http://flask.pocoo.org/snippets/62/ for an example.
-        # if not is_safe_url(next):
-        #     return flask.abort(400)
 
   form2 = RegisterForm()
   if form2.validate_on_submit():
     hashed_password = bcrypt.generate_password_hash(form2.password.data)
-    new_user = User(username=form2.username.data,email=form2.email.data,password = hashed_password)
-    db.session.add(new_user)
-    db.session.commit()
+    register_user(username=form2.username.data,email=form2.email.data,password = hashed_password)
+    
     return redirect(url_for('login'))
   return render_template('login.html', form1=form1,form2=form2)
+
+def register_user(username,email,password):
+  new_user = User(username=username,email=email,password=password)
+  db.session.add(new_user)
+  db.session.commit()
+  return True
+
 
 @app.route('/dashboard',methods=['GET','POST'])
 @login_required
 def dashboard():
   resultlast=""
+  manufactures=[]
+  manufacturer=[]
   # print(current_user.username)
   form3 = UploadForm()
   if form3.validate_on_submit():   #اعرفي استخدامها 
@@ -174,11 +175,15 @@ def dashboard():
         filename = secure_filename(file.filename) 
         imagename = current_user.username + "_" + datetime.now().strftime("%m_%d_%Y_%H_%M_%S") + "_" +filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], imagename))
-        manufacturer = getImplantType(app.config['UPLOAD_FOLDER'], imagename,int(form3.bw_lvl.data))
+        manufacturer = np.round(getImplantType(app.config['UPLOAD_FOLDER'], imagename,int(form3.bw_lvl.data))*100)
         manufactures =['strau','astra','b_b']
+        
+       # for i in range(3):
+       #   resultlast = resultlast +"\n"+"\n"+ manufactures[i] + " " + str(round(manufacturer[0][i] * 100)) + "% \n \n \n"+"\n"+"\n"
+
         indexmax = np.argmax(manufacturer)
-        resultlast = manufactures[indexmax] + " " + str(round(manufacturer[0][indexmax] * 100)) + "%"
-        new_upload = Upload(imagename=imagename,doctoremail=current_user.email, patientname=form3.patientname.data,patientemail=form3.patientemail.data,comment=form3.comment.data,bw_lvl=int(form3.bw_lvl.data),manufacturer=str(manufacturer[0]))
+        #resultlast = manufactures[indexmax] + " " + str(round(manufacturer[0][indexmax] * 100)) + "%"
+        new_upload = Upload(imagename=imagename,doctoremail=current_user.email, patientname=form3.patientname.data,patientemail=form3.patientemail.data,comment=form3.comment.data,bw_lvl=int(form3.bw_lvl.data),manufacturer=str(manufacturer[0]),topman=str(manufactures[indexmax]))
         db.session.add(new_upload)
         db.session.commit() 
   # images = Upload.query.filter_by(email=current_user.email).first()
@@ -190,7 +195,7 @@ def dashboard():
   cur.execute(sqlite_insert_query,data_tuple)
   data = cur.fetchall()
   conn.close()
-  return render_template('dashboard.html',form3=form3,data=data,resultlast=resultlast)
+  return render_template('dashboard.html',form3=form3,data=data,resultlast=manufactures,shahad=manufacturer)
 
 
 ########function #########
