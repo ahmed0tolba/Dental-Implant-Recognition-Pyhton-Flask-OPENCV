@@ -308,7 +308,7 @@
 <br>
 <br>
 <body>
-    
+    {{message}}
             <!-----warning--------->
             {% for message in get_flashed_messages() %}
             
@@ -326,10 +326,10 @@
         <form action="" method="POST">
             {{form1.hidden_tag()}}
             <label>
-                {{form1.email}}
+                {{form1.email1}}
             </label>
             <label>
-                {{form1.password}}
+                {{form1.password1}}
             </label>
             <!---  <p class="forgot-pass">Forgot password?</p> -->
             {{form1.submit}}
@@ -353,24 +353,32 @@
         </div>
    
         <!---------------------------------------------------sind up ----------------------------------------------------->
+     
         <div class="form sign-up">
             <h2>Create your Account</h2>
             <form action="" method="POST">
                 {{form2.hidden_tag()}}
 
                 <label>
-                    {{form2.username}}
+                    {{form2.username2}}
                 </label>
                 <label>
-                    {{form2.email}}
+                    {{form2.email2}}
                 </label>
                 <label>
-                    {{form2.password}}
+                    {{form2.password2}}
                 </label>
                 {{form2.submit}}
             </form>
         </div>
     </div>
+    <!--------------warning--------------->
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
     <!---->
 </div>
 </body>

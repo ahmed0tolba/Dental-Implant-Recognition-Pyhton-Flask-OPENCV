@@ -32,17 +32,8 @@ def getImplantValues(SaveDir,imgName,thresholdbw):
   # print("BWFilling")
   # cv2_imshow(BWFilling)
 
-  # (thresh, BWFillingImplant) = cv.threshold(blured, 150, 255, cv.THRESH_BINARY)
-  # cv2_imshow(BWFillingImplant)
 
-  # contours, hierarchy = cv.findContours(BWFilling,cv.RETR_LIST,cv.CHAIN_APPROX_SIMPLE)[-2:]
-  # idx =0 
-  # for cnt in contours:
-  #     idx += 1
-  #     x,y,w,h = cv.boundingRect(cnt)
-  #     radius = int(h/2 + 10 if h>w else w/2+10)
-  #     BWFillingImplant = cv.circle(BWFillingImplant, (int(x+w/2),int(y+h/2)), radius, (0, 0, 0), -1)
-  # cv2_imshow(BWFilling)
+
 
   contours, hierarchy = cv.findContours(BWFilling,cv.RETR_LIST,cv.CHAIN_APPROX_SIMPLE)[-2:]
   idx = 0

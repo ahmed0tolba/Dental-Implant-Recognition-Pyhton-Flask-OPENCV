@@ -1,6 +1,4 @@
-# pip install flask 
-# pip install Flask-SQLAlchemy flask_login flask_bcrypt flask_wtf wtforms email_validator 
-# 
+
 # from distutils.command.upload import upload
 import sqlite3
 from flask import Flask,make_response,url_for,redirect, request, render_template,current_app, g, send_file,flash
@@ -8,7 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 #login 
 from flask_login import UserMixin, LoginManager,login_user,login_required,logout_user,current_user
 #form 
-from flask_wtf import FlaskForm # mistake (wtforms)
+from flask_wtf import FlaskForm
+from sqlalchemy import false # mistake (wtforms)
 from wtforms import StringField,PasswordField, SubmitField
 from wtforms.validators import InputRequired,Length,ValidationError
 from flask_bcrypt import Bcrypt
@@ -56,9 +55,9 @@ class Upload(db.Model,UserMixin):
 
 ########## FLASK FORM  ###########
 class RegisterForm(FlaskForm):
-  username = StringField(validators = [InputRequired(),Length(min=4,max=20)],render_kw={"placeholder":"Username"})
-  email = StringField(validators = [InputRequired(),Length(min=4,max=40)],render_kw={"placeholder":"Email"})
-  password = PasswordField(validators = [InputRequired(),Length(min=4,max=20)],render_kw={"placeholder":"Password"})
+  username2 = StringField(validators = [InputRequired(),Length(min=4,max=20)],render_kw={"placeholder":"Username"})
+  email2 = StringField(validators = [InputRequired(),Length(min=4,max=40)],render_kw={"placeholder":"Email"})
+  password2 = PasswordField(validators = [InputRequired(),Length(min=4,max=20)],render_kw={"placeholder":"Password"})
   submit = SubmitField("Register")
 
   def validate_username(self, username):
@@ -75,8 +74,8 @@ class RegisterForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-  email = StringField(validators = [InputRequired(),Length(min=4,max=40)],render_kw={"placeholder":"Email"})
-  password = PasswordField(validators = [InputRequired(),Length(min=4,max=20)],render_kw={"placeholder":"Password"})
+  email1 = StringField(validators = [InputRequired(),Length(min=4,max=40)],render_kw={"placeholder":"Email"})
+  password1 = PasswordField(validators = [InputRequired(),Length(min=4,max=20)],render_kw={"placeholder":"Password"})
   submit = SubmitField("Login")
 
 class UploadForm(FlaskForm):
@@ -112,35 +111,44 @@ def index():
 
 @app.route('/login',methods=['GET','POST'])
 def login():
-  
+  message = ""
   if current_user.is_authenticated:
     return redirect(url_for('dashboard'))
 
-  
   form1 = LoginForm()
-  if form1.validate_on_submit():
+  form2 = RegisterForm()
+
+  if request.method == "POST":
+
+    if form1.validate_on_submit():
       # Login and validate the user.
       # user should be an instance of `User` class
-    if request.method == "POST":
-      user = User.query.filter_by(email=form1.email.data).first()
-        
+      user = User.query.filter_by(email=form1.email1.data).first()      
      
       if user:
        
-        if bcrypt.check_password_hash(user.password, form1.password.data):
+        if bcrypt.check_password_hash(user.password, form1.password1.data):
           login_user(user)
           return redirect(url_for('dashboard'))
         
-      else:
-          flash(" !!!!!! Invalid username or password !!!!!")
+        else:
+          message = " !!!!!! Invalid username or password !!!!!"
 
-  form2 = RegisterForm()
-  if form2.validate_on_submit():
-    hashed_password = bcrypt.generate_password_hash(form2.password.data)
-    register_user(username=form2.username.data,email=form2.email.data,password = hashed_password)
-    
-    return redirect(url_for('login'))
-  return render_template('login.html', form1=form1,form2=form2)
+      else:
+        message = " !!!!!! Invalid username or password !!!!!"
+        
+  if request.method == "POST":
+    if form2.validate_on_submit():
+      hashed_password = bcrypt.generate_password_hash(form2.password2.data)
+      user = User.query.filter_by(email=form2.email2.data).first() 
+      if user:
+        message = " the email is already registered "
+      elif User.query.filter_by(username=form2.username2.data).first():
+        message =" the username is already registered "
+      else:
+        registeredSuccessfully = register_user(username=form2.username2.data,email=form2.email2.data,password = hashed_password)
+      
+  return render_template('login.html', form1=form1,form2=form2,message = message)
 
 def register_user(username,email,password):
   new_user = User(username=username,email=email,password=password)
