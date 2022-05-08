@@ -156,10 +156,24 @@ def register_user(username,email,password):
   db.session.commit()
   return True
 
+@app.route('/deleteid/<int:deletedid>',methods=['GET','POST'])
+@login_required
+def deleteid(deletedid):
+  if request.method == 'POST':
+    sqlite_insert_query = """delete from upload
+                            where doctoremail = ? and id = ? ;"""
+    data_tuple = (current_user.email,deletedid,)
+    conn = sqlite3.connect(databasename, uri=True)
+    cur = conn.cursor()
+    cur.execute(sqlite_insert_query,data_tuple)
+    conn.commit()
+    conn.close()
+  return redirect(url_for('dashboard'))
 
 @app.route('/dashboard',methods=['GET','POST'])
 @login_required
 def dashboard():
+  
   resultlast=""
   manufactures=[]
   manufacturer=[]

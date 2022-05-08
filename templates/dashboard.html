@@ -207,9 +207,11 @@
                             </td>
                             <td style="border-right: .1em solid black; padding: 1em;">{{item[5]}}</td>
                             <td style="border-right: .1em solid black; padding: 1em;">{{item[6]}}</td>
-                            <td style="border-right: .1em solid black; padding: 1em;"> {{item[7]}} </td>
+                            <td style="border-right: .1em solid black; padding: 1em;">{{item[7]}}</td>
                             <td style="border-right: .1em solid black; padding: 1em;">{{item[8]}}</td>
-    
+                            <td style="border-right: .1em solid black; padding: 1em;" >
+                                <img src="../static/images/delete.png" style="width:30px" onclick="deleteID('{{item[0]}}')">
+                            </td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -235,6 +237,13 @@
 
 
 <script>
+    function deleteID(a) {
+        const request = new XMLHttpRequest()
+        request.open('POST',`/deleteid/${a}`)
+        request.send();
+        console.log(a);
+    }
+
     /***************switch content  ************/
     var A = document.getElementById("A");
     var B = document.getElementById("B");
