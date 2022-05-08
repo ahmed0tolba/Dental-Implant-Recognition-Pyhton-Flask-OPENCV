@@ -230,6 +230,62 @@
 
    <!----- </div>
     - withe space end  -------->
+                    <li> <a href="/#circle">About</a> </li>
+                    <li> <a href="#contact">Contact Us</a> </li>
+                </ul>
+               <!-- <hr>----->
+            </div>
+            <!-------input part------->
+            <div>
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {{form3.hidden_tag()}}
+                    <input type="file" name="file">
+                    <label>
+                        {{form3.patientemail}}
+                    </label>
+                    <label>
+                        {{form3.patientname}}
+                    </label>
+                    <label>
+                        {{form3.comment}}
+                    </label>
+                    <label>
+                        {{form3.bw_lvl(size=3, value="0")}}
+                    </label>
+                    <input type="submit">
+                </form>
+            
+            </div>
+
+            <div style="text-align: center;display: block;">
+                <table style="border: 2px solid #15245e; margin-top:1em ;margin-left:auto;margin-right:auto;border-collapse: collapse;">
+                    {% for item in data %}
+                    <tr style="border-bottom: .2em solid black;">
+                        <!-- <td style="border-right: .1em solid black; padding: 1em;">{{item[0]}}</td> -->
+                        <!-- <td style="border-right: .1em solid black; padding: 1em;">{{item[1]}}</td> -->
+                        <td style="border-right: .1em solid black; padding: 1em;">{{item[2]}}</td>
+                        <td style="border-right: .1em solid black; padding: 1em;">{{item[3]}}</td>
+                        <td style="border-right: .1em solid black; padding: 1em;">
+                            <img class ="im" id="{{item[4]}}" src='../static/implants/{{item[4]}}'>                
+                        </td>
+                        <td style="border-right: .1em solid black; padding: 1em;">
+                            <img class ="im" id="BW_{{item[4]}}" src='../static/implants/BW_{{item[4]}}'>                
+                        </td>
+                        <!-- <td style="border-right: .1em solid black; padding: 1em;">{{item[5]}}</td> -->
+                        <td style="border-right: .1em solid black; padding: 1em;">{{item[6]}}</td>
+                        <td style="border-right: .1em solid black; padding: 1em;">{{item[7]}}</td>
+                        <td style="border-right: .1em solid black; padding: 1em;">{{item[8]}}</td>
+                        
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+    </div>
+    <!--- save part end --->
+
+    </div>
+    <!------ withe space end  -------->
 
 
 
@@ -335,8 +391,31 @@
             else
                 loopit("nc");
         }, 1);
-
     }
+function preloadImages(array) {
+    if (!preloadImages.list) {
+        preloadImages.list = [];
+    }
+    var list = preloadImages.list;
+    for (var i = 0; i < array.length; i++) {
+        var img = new Image();
+        img.onload = function() {
+            var index = list.indexOf(this);
+            if (index !== -1) {
+                // remove image from the array once it's loaded
+                // for memory consumption reasons
+                list.splice(index, 1);
+            }
+        }
+        list.push(img);
+        img.src = array[i];
+    }
+}
+
+preloadImages(["url1.jpg", "url2.jpg", "url3.jpg"
+
+]);
+
 </script>
 
 

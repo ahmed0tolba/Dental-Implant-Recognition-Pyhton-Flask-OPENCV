@@ -1,4 +1,5 @@
-
+# pip install flask 
+# pip install Flask-SQLAlchemy flask_login flask_bcrypt flask_wtf wtforms email_validator 
 # from distutils.command.upload import upload
 import sqlite3
 from flask import Flask,make_response,url_for,redirect, request, render_template,current_app, g, send_file,flash
@@ -30,7 +31,11 @@ login_manager = LoginManager()    # pip install flask-login
 login_manager.init_app(app) 
 login_manager.login_view ="login"
 
+<<<<<<< HEAD
 
+=======
+############################
+>>>>>>> 5856d3075e43bfe894ee3457921b9d527207c4f3
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
