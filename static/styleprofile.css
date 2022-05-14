@@ -6,6 +6,7 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
+    font-family: "Trirong", serif ,Tahoma;
 }
 /*menu*/
 .mainmenu{
@@ -92,7 +93,7 @@ body {
 }
 /* chosin icon color implant */
 .selected_icon_divimg2{
-    background: #bed1d1;
+    background: #ebedf3;
     border-radius: 6px;
     position: absolute;
     top: 126px;
@@ -130,7 +131,7 @@ body {
     width: 80%;
     height: 68%;
     margin: 0 auto;
-    background: #bed1d1;
+    background: #ebedf3;
    
 }
 
@@ -141,7 +142,7 @@ body {
     height: 30%;
     top: 22%;
     left: 10%;
-    background-color: #bed1d1;
+    background-color: #ebedf3;
     border: 1px solid black;
 }
 
@@ -151,7 +152,7 @@ body {
     height: 30%;
     top: 22%;
     left: 10%;
-    background-color: #bed1d1;
+    background-color: #ebedf3;
     border-radius: 15px;
     background-position: center;
     background-size: cover;
@@ -349,3 +350,8 @@ body {
     font-size: 0.5em;
     text-anchor: middle;
   }
+.resultlast_table p{
+    margin-right: 60px;
+    font-size: 20px;
+
+}

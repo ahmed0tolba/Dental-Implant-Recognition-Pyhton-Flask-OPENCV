@@ -20,6 +20,7 @@ def getImplantValues(SaveDir,imgName,thresholdbw):
   img =  cv.imread(SaveDir+imgName)[:,:,0]
   # print("img")
   # cv2_imshow(img)
+  #avarage and 10x10 matrix
   blured = cv.blur(img,(10,10)) 
   # print("blured")
   # cv2_imshow(blured)
@@ -34,7 +35,7 @@ def getImplantValues(SaveDir,imgName,thresholdbw):
 
 
 
-
+#contours is a Python list of all the contours in the image
   contours, hierarchy = cv.findContours(BWFilling,cv.RETR_LIST,cv.CHAIN_APPROX_SIMPLE)[-2:]
   idx = 0
   idy = 0
@@ -43,6 +44,7 @@ def getImplantValues(SaveDir,imgName,thresholdbw):
   contours_filter1_center=[]
   contours_filter1_angle=[]
   dist_from_edge_to_curve=0
+#find implants in the image and make it Saturate  
   for cnt in contours:  
     idx += 1
     x,y,w,h = cv.boundingRect(cnt)    
@@ -55,12 +57,12 @@ def getImplantValues(SaveDir,imgName,thresholdbw):
       # print("crop_impant")
       # cv2_imshow(crop_impant)
       angle = 0
-      Saturated = False
-      
+      Saturated = False      
       max=100
       c=0
       direction = 0
       directionold = 0
+      #by check the width of the conture
       while (not Saturated):
         directionold = direction
         c +=1
@@ -88,32 +90,35 @@ def getImplantValues(SaveDir,imgName,thresholdbw):
         rotated = ndimage.rotate(crop_impant, 90)
         x,y,w,h = cv.boundingRect(rotated)      
       
-      
-      crop_rotated_impant = np.zeros((h+10,w+10), np.uint8)
+      # after the rotate the image size change a bit so we crop to another new img 
+      crop_rotated_impant = np.zeros((h+10,w+10), np.uint8) #black box array
       crop_rotated_impant[5:y+h+5,5:x+w+5] = rotated[y:y+h, x:x+w]
-      # crop_rotated_impant = rotated[y-5:y+h+5, x-5:x+w+5]
+     
 
+      #find the edges and Contours for the new image already its black and wite 0 and 255
       edges = cv.Canny(crop_rotated_impant,100,200)
       contours1, hierarchy = cv.findContours(edges,cv.RETR_LIST,cv.CHAIN_APPROX_SIMPLE)[-2:]
       # print("edges")
       # cv2_imshow(edges)
 
       for contour in contours1:
-        # print("cotlen ", len(contour))
+        # if it have more than 200 pixal it is the implant 
         if ( len(contour)>200):
           topleftpoint = []
-          topleftdist = 9999
+          topleftdist = 9999 # init max value
           toprightpoint = []
           toprightdist = 9999
           bottomleftpoint = []
           bottomleftdist = 9999
           bottomrightpoint = []
           bottomrightdist=9999
+          #pixel by pixel in that contour (x,y) 
+          #tip finding in two case up or dowan bt find the smallest destence using pythagoras
           for point in contour:
-            distthispointtopleft = (((0 - point[0][0] )**2) + ((0-point[0][1])**2) )**0.5
-            distthispointtopright = (((x+w+5 - point[0][0] )**2) + ((0-point[0][1])**2) )**0.5
-            distthispointbottomleft = (((0 - point[0][0] )**2) + ((y+h+5-point[0][1])**2) )**0.5
-            distthispointbottomright = (((x+w+5 - point[0][0] )**2) + ((y+h+5-point[0][1])**2) )**0.5
+            distthispointtopleft = (((0 - point[0][0] )**2) + ((0-point[0][1])**2) )**0.5 #top left(0,0)
+            distthispointtopright = (((x+w+5 - point[0][0] )**2) + ((0-point[0][1])**2) )**0.5 #top right (x+w+5,0)
+            distthispointbottomleft = (((0 - point[0][0] )**2) + ((y+h+5-point[0][1])**2) )**0.5 #bottom left (0,y+h+5)
+            distthispointbottomright = (((x+w+5 - point[0][0] )**2) + ((y+h+5-point[0][1])**2) )**0.5 #bottom right(x+w+5,y+h+5)
             if distthispointtopleft < topleftdist :
               topleftdist = distthispointtopleft
               topleftpoint = point[0]
@@ -127,26 +132,27 @@ def getImplantValues(SaveDir,imgName,thresholdbw):
               bottomrightdist = distthispointbottomright
               bottomrightpoint = point[0]
           
-          dist_up = (((topleftpoint[0] - toprightpoint[0] )**2) + ((topleftpoint[1]-toprightpoint[1])**2) ) ** 0.5
-          dist_down = (((bottomleftpoint[0] - bottomrightpoint[0] )**2) + ((bottomleftpoint[1]-bottomrightpoint[1])**2) ) **0.5
+          dist_up = (((topleftpoint[0] - toprightpoint[0] )**2) + ((topleftpoint[1]-toprightpoint[1])**2) ) ** 0.5 # base
+          dist_down = (((bottomleftpoint[0] - bottomrightpoint[0] )**2) + ((bottomleftpoint[1]-bottomrightpoint[1])**2) ) **0.5 # tip  
 
           cv.circle(edges, (topleftpoint[0],topleftpoint[1]), 5, (100, 100, 100), 2)
           cv.circle(edges, (toprightpoint[0],toprightpoint[1]), 5, (100, 100, 100), 2)
           cv.circle(edges, (bottomleftpoint[0],bottomleftpoint[1]), 5, (100, 100, 100), 2)
           cv.circle(edges, (bottomrightpoint[0],bottomrightpoint[1]), 5, (100, 100, 100), 2)
           print((edges.shape))
+
           ninety_percent_dist_to_intersection_point=0
           flop180 = False
-          if (dist_down + dist_up > w):
-            if dist_up >= dist_down:# and dist_down + dist_up > 100:
+          if (dist_down + dist_up > w): #be sure it is rightt calculation 
+            if dist_up >= dist_down:# if implant in right stste   
               flop180 = True
               dist_from_edge_to_curve = ( distthispointbottomleft + distthispointbottomright ) / 2 / w
-              widthratio = dist_down / w
-              ydown = round((bottomleftpoint[1]+bottomrightpoint[1])/2); 
-              widthydown = bottomrightpoint[0]-bottomleftpoint[0]
+              widthratio = dist_down / w # first feature tip ratio
+              ydown = round((bottomleftpoint[1]+bottomrightpoint[1])/2); #y 
+              widthydown = bottomrightpoint[0]-bottomleftpoint[0] #x
               ninety_percent_dist_to_intersection_point = widthydown
               yup_ninety_percent_dist = ydown
-              while ninety_percent_dist_to_intersection_point < 0.8 * w:
+              while ninety_percent_dist_to_intersection_point < 0.8 * w: #y axis antel 80% width
                 ydown -=1
                 firstloc = 0
                 firstrecorded = False
@@ -154,7 +160,7 @@ def getImplantValues(SaveDir,imgName,thresholdbw):
                 secondrecorded = False
                 count = 0
                 previouspoint=0
-                for point in edges[ydown][:]:
+                for point in edges[ydown][:]: #x axis
                   if (count>1):
                     if (point==255 and firstrecorded and edges[ydown][count-1]==0):
                       secondrecorded = True
@@ -162,7 +168,7 @@ def getImplantValues(SaveDir,imgName,thresholdbw):
                       ninety_percent_dist_to_intersection_point = secondloc - firstloc
                       yup_ninety_percent_dist = ydown
 
-                    if (point==255 and not firstrecorded and edges[ydown][count-1]==0):
+                    if (point==255 and not firstrecorded and edges[ydown][count-1]==0): #first wite point =255 and the point befor is black =0
                       firstrecorded = True
                       firstloc = count                    
                   previouspoint = point
@@ -176,7 +182,7 @@ def getImplantValues(SaveDir,imgName,thresholdbw):
               widthyup = toprightpoint[0]-topleftpoint[0]
               ninety_percent_dist_to_intersection_point = widthyup
               yup_ninety_percent_dist = yup
-              while ninety_percent_dist_to_intersection_point < 0.8 * w:
+              while ninety_percent_dist_to_intersection_point < 0.8 * w: 
                 yup +=1
                 firstloc = 0
                 firstrecorded = False

@@ -54,7 +54,7 @@
             </form>---> 
             <!-------input part------->
             <div>
-                <form action="" method="POST" enctype="multipart/form-data"  class="form_style">
+                <form action="" method="POST" enctype="multipart/form-data"  class="form_style" id="form3">
                     {{form3.hidden_tag()}}
                     <input type="file" name="file" class="upload" id="image_input">
                     <label>
@@ -70,7 +70,7 @@
                     </label>
                     <br><br>
                     <label>
-                        {{form3.bw_lvl(size=3, value="180", class_='info_style') }}
+                        {{form3.bw_lvl(size=3, value="0", class_='info_style') }}
                     </label>
                     <br><br>
                     <input type="submit" class="submit" value=" ">
@@ -78,17 +78,13 @@
 
             </div>
 
-           <!---- <div class="detection"></div>---->
             <div class="half2">
-
+                
                 <h1>Manufacturer Details</h1>
                 <!-----------percentage -------------->
-                {% if shahad|length == 0 %}
-               
+                {% if manufacturer|length == 0 %}  
+                <h3 style="color: red;">{{message}}</h3>
                 {% else %}
-                <div>
-                  <!----  {% set variable_nam = shahad[0][0] %}---->
-
                 <div class="flex-wrapper">
 
                     <div class="single-chart">
@@ -99,12 +95,12 @@
                             a 15.9155 15.9155 0 0 1 0 -31.831"
                         />
                         <path class="circle"
-                          stroke-dasharray="{{shahad[0][0]}}, 100"
+                          stroke-dasharray="{{manufacturer[0][0]}}, 100"
                           d="M18 2.0845
                             a 15.9155 15.9155 0 0 1 0 31.831
                             a 15.9155 15.9155 0 0 1 0 -31.831"
                         />
-                        <text x="18" y="20.35" class="percentage">{{ shahad[0][0]}}</text>
+                        <text x="18" y="20.35" class="percentage">{{ manufacturer[0][0]}}</text>
                       </svg>
                     </div>
                   
@@ -116,12 +112,12 @@
                             a 15.9155 15.9155 0 0 1 0 -31.831"
                         />
                         <path class="circle"
-                          stroke-dasharray="{{shahad[0][1]}}, 100"
+                          stroke-dasharray="{{manufacturer[0][1]}}, 100"
                           d="M18 2.0845
                             a 15.9155 15.9155 0 0 1 0 31.831
                             a 15.9155 15.9155 0 0 1 0 -31.831"
                         />
-                        <text x="18" y="20.35" class="percentage">{{shahad[0][1]}}</text>
+                        <text x="18" y="20.35" class="percentage">{{manufacturer[0][1]}}</text>
                       </svg>
                     
                     </div>
@@ -134,26 +130,25 @@
                             a 15.9155 15.9155 0 0 1 0 -31.831"
                         />
                         <path class="circle"
-                          stroke-dasharray="{{shahad[0][2]}}, 100"
+                          stroke-dasharray="{{manufacturer[0][2]}}, 100"
                           d="M18 2.0845
                             a 15.9155 15.9155 0 0 1 0 31.831
                             a 15.9155 15.9155 0 0 1 0 -31.831"
                         />
-                        <text x="18" y="20.35" class="percentage">{{shahad[0][2]}}</text>
+                        <text x="18" y="20.35" class="percentage">{{manufacturer[0][2]}}</text>
                       </svg>
                     </div>
                   </div>
-                </div><!-----------end percentage -------------->
+                <!-----------end percentage -------------->
 {% endif %}
 
 
 
-
-                <table style="border-spacing: 40px 10px;"> 
+              <table > 
                      <tr>
                     {% for item in resultlast %}
                   
-                        <td> {{item}}</td>
+                        <td class="resultlast_table"> <p>{{item}}</p></td>
                     
                     {% endfor %}
                 </tr>
@@ -198,18 +193,28 @@
                             <!-- <td style="border-right: .1em solid black; padding: 1em;">{{item[0]}}</td> -->
                             <!-- <td style="border-right: .1em solid black; padding: 1em;">{{item[1]}}</td> -->
                             <td style="border-right: .1em solid black; padding: 1em;">{{item[2]}}</td>
+                          
                             <td style="border-right: .1em solid black; padding: 1em;">{{item[3]}}</td>
+                          
                             <td style="border-right: .1em solid black; padding: 1em;">
                                 <img src='../static/implants/{{item[4]}}'>
+                          
                             </td>
                             <td style="border-right: .1em solid black; padding: 1em;">
                                 <img src='../static/implants/BW_{{item[4]}}'>
                             </td>
+                          
                             <td style="border-right: .1em solid black; padding: 1em;">{{item[5]}}</td>
+                          
                             <td style="border-right: .1em solid black; padding: 1em;">{{item[6]}}</td>
-                            <td style="border-right: .1em solid black; padding: 1em;"> {{item[7]}} </td>
+                          
+                            <!--<td style="border-right: .1em solid black; padding: 1em;"> {{item[7]}} </td>-->
+                          
                             <td style="border-right: .1em solid black; padding: 1em;">{{item[8]}}</td>
-    
+                          
+                            <td style="border-right: .1em solid black; padding: 1em;" >
+                                <img src="../static/images/delete-icon.jpg" style="width:30px" onclick="deleteID('{{item[0]}}')">
+                            </td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -235,6 +240,14 @@
 
 
 <script>
+    document.getElementById("form3").reset();
+    function deleteID(a) {
+        const request = new XMLHttpRequest()
+        request.open('POST',`/deleteid/${a}`)
+        request.send();
+        document.getElementById("form3").reset();
+        location.reload();
+    }
     /***************switch content  ************/
     var A = document.getElementById("A");
     var B = document.getElementById("B");

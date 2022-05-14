@@ -79,8 +79,8 @@ class LoginForm(FlaskForm):
   submit = SubmitField("Login")
 
 class UploadForm(FlaskForm):
-  patientname = StringField(validators = [InputRequired(),Length(min=2,max=20)],render_kw={"placeholder":"Name"})
-  patientemail = StringField(validators = [InputRequired(),Length(min=4,max=40)],render_kw={"placeholder":"Email"})
+  patientname = StringField(validators = [InputRequired(),Length(min=2,max=20)],render_kw={"placeholder":"Patient name"})
+  patientemail = StringField(validators = [InputRequired(),Length(min=4,max=40)],render_kw={"placeholder":"Patient ID"})
   comment = StringField(validators = [InputRequired(),Length(min=0,max=40)],render_kw={"placeholder":"Comment"})
   bw_lvl = StringField(validators = [InputRequired(),Length(min=0,max=3)],render_kw={"placeholder":"BW LVL"})
 
@@ -132,10 +132,10 @@ def login():
           return redirect(url_for('dashboard'))
         
         else:
-          message = " !!!!!! Invalid username or password !!!!!"
+          message = "Invalid password!"
 
       else:
-        message = " !!!!!! Invalid username or password !!!!!"
+        message = "Invalid email !"
         
   if request.method == "POST":
     if form2.validate_on_submit():
@@ -156,44 +156,68 @@ def register_user(username,email,password):
   db.session.commit()
   return True
 
+@app.route('/deleteid/<int:deletedid>',methods=['GET','POST'])
+@login_required
+def deleteid(deletedid):
+  manufactures=[]
+  manufacturer=[]
+  form3 = UploadForm()
+  print(deletedid)
+  if request.method == 'POST':
+    sqlite_insert_query = """delete from upload
+                            where doctoremail = ? and id = ? ;"""
+    data_tuple = (current_user.email,deletedid,)
+    conn = sqlite3.connect(databasename, uri=True)
+    cur = conn.cursor()
+    cur.execute(sqlite_insert_query,data_tuple)
+    conn.commit()
+    conn.close()
+    return redirect(url_for('dashboard'))
+  sqlite_insert_query = """select * from upload
+                            where doctoremail = ? ORDER BY id DESC;"""
+  data_tuple = (current_user.email,)
+  conn = sqlite3.connect(databasename, uri=True)
+  cur = conn.cursor()
+  cur.execute(sqlite_insert_query,data_tuple)
+  data = cur.fetchall()
+  conn.close()
+  return render_template('dashboard.html',form3=form3,data=data,resultlast=manufactures,manufacturer=manufacturer)
+
 
 @app.route('/dashboard',methods=['GET','POST'])
 @login_required
 def dashboard():
-  resultlast=""
+  message = ""
   manufactures=[]
   manufacturer=[]
-  # print(current_user.username)
+  print("hi")
   form3 = UploadForm()
-  if form3.validate_on_submit():   #اعرفي استخدامها 
+  if form3.validate_on_submit():   
     
     if request.method == 'POST':
       # check if the post request has the file part
       if 'file' not in request.files:
-        flash('No file part')
-        return redirect(request.url)
+        message="No file part"
+        #return redirect(request.url)
       # get the implant image  
       file = request.files['file']
       # if user does not select file, browser also
       # submit a empty part without filename
       if file.filename == '':
-        flash('No selected file')
-        return redirect(request.url)
+        message="No selected file"
+        #return redirect(request.url)
       if file and allowed_file(file.filename):
         filename = secure_filename(file.filename) 
         imagename = current_user.username + "_" + datetime.now().strftime("%m_%d_%Y_%H_%M_%S") + "_" +filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], imagename))
         manufacturer = np.round(getImplantType(app.config['UPLOAD_FOLDER'], imagename,int(form3.bw_lvl.data))*100)
-        manufactures =['strau','astra','b_b']
-        
-       # for i in range(3):
-       #   resultlast = resultlast +"\n"+"\n"+ manufactures[i] + " " + str(round(manufacturer[0][i] * 100)) + "% \n \n \n"+"\n"+"\n"
+        manufactures =['Straumann','Astra','B&B']
 
-        indexmax = np.argmax(manufacturer)
-        #resultlast = manufactures[indexmax] + " " + str(round(manufacturer[0][indexmax] * 100)) + "%"
+        indexmax = np.argmax(manufacturer) 
         new_upload = Upload(imagename=imagename,doctoremail=current_user.email, patientname=form3.patientname.data,patientemail=form3.patientemail.data,comment=form3.comment.data,bw_lvl=int(form3.bw_lvl.data),manufacturer=str(manufacturer[0]),topman=str(manufactures[indexmax]))
         db.session.add(new_upload)
         db.session.commit() 
+      message="This file type is not allowed"
   # images = Upload.query.filter_by(email=current_user.email).first()
   sqlite_insert_query = """select * from upload
                             where doctoremail = ? ORDER BY id DESC;"""
@@ -203,7 +227,7 @@ def dashboard():
   cur.execute(sqlite_insert_query,data_tuple)
   data = cur.fetchall()
   conn.close()
-  return render_template('dashboard.html',form3=form3,data=data,resultlast=manufactures,shahad=manufacturer)
+  return render_template('dashboard.html',form3=form3,data=data,resultlast=manufactures,manufacturer=manufacturer,message=message)
 
 
 ########function #########
@@ -219,7 +243,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @login_required
 def logout():
   logout_user()
-  return redirect(url_for('login'))
+  return redirect(url_for('index'))
 
 # @app.route('/register',methods=['GET','POST'])
 # def register():

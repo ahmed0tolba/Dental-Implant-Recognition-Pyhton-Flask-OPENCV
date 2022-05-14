@@ -16,7 +16,8 @@
         }
 
         body {
-            font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+            font-family: "Trirong", serif ,Tahoma;
+            /*font-family: 'Open Sans', Helvetica, Arial, sans-serif;*/
             background: #ffffff;
         }
 
@@ -256,7 +257,7 @@
             text-align: center;
         }
 
-    /*    .forgot-pass {
+        /*    .forgot-pass {
             margin-top: 15px;
             text-align: center;
             font-size: 12px;
@@ -303,85 +304,84 @@
             -webkit-transform: translate3d(0, 0, 0);
             transform: translate3d(0, 0, 0);
         }
+
+        .warninga {
+            text-align: center;
+            color: red;
+        }
     </style>
 </head>
 <br>
 <br>
+
 <body>
-    {{message}}
-            <!-----warning--------->
-            {% for message in get_flashed_messages() %}
-            
-            <div class="w-50 p-3 alert alert-warning alert-dismissible fade show" role="alert">
-                {{message}}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-          
-           {% endfor %}
-<div class="cont">
 
-    <!--------------------------------------------sind in ------------------------------------------->
-    <div class="form sign-in">       
-        <h2>Welcome</h2>
-        <form action="" method="POST">
-            {{form1.hidden_tag()}}
-            <label>
-                {{form1.email1}}
-            </label>
-            <label>
-                {{form1.password1}}
-            </label>
-            <!---  <p class="forgot-pass">Forgot password?</p> -->
-            {{form1.submit}}
-        </form>
-    </div>
-    <!---half sing up/in  --->
-    <div class="sub-cont">
-        <div class="img">
-            <div class="img__text m--up">
+    <!---warning--->
+    <h2 class="warninga"> {{message}}</h2>
+    <!---->
 
-                <h3>Don't have an account? Please Sign up!<h3>
-            </div>
-            <div class="img__text m--in">
+    <div class="cont">
 
-                <h3>If you already has an account, just sign in.<h3>
-            </div>
-            <div class="img__btn">
-                <span class="m--up">Sign Up</span>
-                <span class="m--in">Sign In</span>
-            </div>
-        </div>
-   
-        <!---------------------------------------------------sind up ----------------------------------------------------->
-     
-        <div class="form sign-up">
-            <h2>Create your Account</h2>
+
+
+        <!--------------------------------------------sign in ------------------------------------------->
+        <div class="form sign-in">
+            <h2>Welcome</h2>
+
             <form action="" method="POST">
-                {{form2.hidden_tag()}}
-
+                {{form1.hidden_tag()}}
                 <label>
-                    {{form2.username2}}
+                    {{form1.email1}}
                 </label>
                 <label>
-                    {{form2.email2}}
+                    {{form1.password1}}
                 </label>
-                <label>
-                    {{form2.password2}}
-                </label>
-                {{form2.submit}}
+                <!---  <p class="forgot-pass">Forgot password?</p> -->
+                {{form1.submit}}
             </form>
         </div>
+        <!---half sing up/in  --->
+        <div class="sub-cont">
+            <div class="img">
+                <div class="img__text m--up">
+
+                    <h3>Don't have an account? Please Sign up!<h3>
+                </div>
+                <div class="img__text m--in">
+
+                    <h3>If you already has an account, just sign in.<h3>
+                </div>
+                <div class="img__btn">
+                    <span class="m--up">Sign Up</span>
+                    <span class="m--in">Sign In</span>
+                </div>
+            </div>
+
+            <!--------------------------------------------------sign up ----------------------------------------------------->
+
+            <div class="form sign-up">
+                <h2>Create your Account</h2>
+                <form action="" method="POST">
+                    {{form2.hidden_tag()}}
+
+                    <label>
+                        {{form2.username2}}
+                    </label>
+                    <label>
+                        {{form2.email2}}
+                    </label>
+                    <label>
+                        {{form2.password2}}
+                    </label>
+                    {{form2.submit}}
+                </form>
+            </div>
+        </div>
+
     </div>
-    <!--------------warning--------------->
-    {% for message in get_flashed_messages() %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        {{message}}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      {% endfor %}
-    <!---->
-</div>
+
 </body>
+
 <!-----------------------------------   script    ---------------------------------------->
 <script>
     document.querySelector('.img__btn').addEventListener('click', function () {

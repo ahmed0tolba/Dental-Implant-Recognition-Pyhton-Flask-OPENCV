@@ -21,10 +21,6 @@ def test_sum():
     
     assert User.query.filter_by(email=testemail).first() != None
 
-
-     
-    
-
 if __name__ == "__main__":
     test_sum()
     print("Everything passed")

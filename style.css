@@ -17,6 +17,7 @@
        height: 300px; /* only for demonstration, should be removed */
    }
    body{
+       font-family: "Trirong", serif ,Tahoma;
        overflow-x: hidden;
        background-color:  rgb(218, 216, 216);
        height: 100%;
